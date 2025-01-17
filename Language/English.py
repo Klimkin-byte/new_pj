@@ -2,7 +2,7 @@ translations = {
     "choose": "Lets start calculate.",
     "enter_num_1": "enter your caliber",
     "Error": "Error!",
-    "enter_data": "Enter data",
+    "enter_data": "Choose data",
     "enter_grad":"Enter the shot angle (in degrees)",
     "enter_wind_speed":"Enter wind speed (m/s): ",
     "enter_temperature":"Enter air temperature (°C): ",

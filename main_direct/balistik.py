@@ -96,7 +96,7 @@ def data_calculate(message):
     butFour = types.KeyboardButton(text_distance)
     butFive = types.KeyboardButton("/close")
     markup.add(butOne, butTwo, butThree, butFour, butFive)
-    bot.send_message(message.chat.id, "", reply_markup=markup)
+    bot.send_message(message.chat.id, "✎", reply_markup=markup)
 
 @bot.message_handler(content_types=['text','photo'])
 def all_data_numbers(message):
@@ -116,22 +116,15 @@ def all_data_numbers(message):
                 print(grad_int)
                 bot.send_message(user_id, f"{true_data_wr},{grad_int}°")
             elif (i.isdigit()) == False:
+                text_data_grad = get_text(user_id, "enter_grad")
+                text_repeat=get_text(user_id, "repeat")
                 print(f"not num {i}",end="")
                 bot.send_message(user_id, text_error)
-
-
-
-            #
-            # elif (i.isdigit()) == False:
-            #     text_data_grad = get_text(user_id, "enter_grad")
-            #     text_repeat=get_text(user_id, "repeat")
-            #     print(f"not num {i}",end="")
-            #     bot.send_message(user_id, text_error)
-            #     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            #     butOne = types.KeyboardButton(text_data_grad)
-            #     butTwo = types.KeyboardButton("/close")
-            #     markup.add(butOne, butTwo)
-            #     bot.send_message(message.chat.id, "", reply_markup=markup)
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                butOne = types.KeyboardButton(text_data_grad)
+                butTwo = types.KeyboardButton("/close")
+                markup.add(butOne, butTwo)
+                bot.send_message(message.chat.id, text_repeat, reply_markup=markup)
 
 
 
