@@ -1,3 +1,5 @@
+
+from six import print_
 from telebot import types
 import telebot
 from dotenv import dotenv_values
@@ -11,6 +13,8 @@ from Language.Ukrainian import translations as uk
 from Language.Russian import translations as ru
 from bullet.types_bull import Bullet
 
+
+user_state = {}
 config_1 = dotenv_values("../.env")
 user_language = {}
 bot=telebot.TeleBot(TOKEN)
@@ -75,7 +79,82 @@ def set_language(message):
         user_language[message.chat.id] = "uk"
         bot.send_message(message.chat.id, get_text(message.chat.id, "choose"))
 
-    start_calculate(message)
+    data_calculate(message)
+
+def data_calculate(message):
+    user_id = message.chat.id
+    text = get_text(user_id, "enter_data")
+    text_data_grad=get_text(user_id, "enter_grad")
+    text_wind_speed=get_text(user_id, "enter_wind_speed")
+    text_temperature=get_text(user_id, "enter_temperature")
+    text_distance=get_text(user_id, "enter_distance")
+    bot.send_message(user_id, text)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    butOne = types.KeyboardButton(text_data_grad)
+    butTwo = types.KeyboardButton(text_wind_speed)
+    butThree = types.KeyboardButton(text_temperature)
+    butFour = types.KeyboardButton(text_distance)
+    butFive = types.KeyboardButton("/close")
+    markup.add(butOne, butTwo, butThree, butFour, butFive)
+    bot.send_message(message.chat.id, "", reply_markup=markup)
+
+@bot.message_handler(content_types=['text','photo'])
+def all_data_numbers(message):
+    user_id = message.chat.id
+    true_data_wr=get_text(user_id, "true_data")
+    if user_id not in user_state:
+        user_state[user_id] = None
+
+    if user_state[user_id]=="text_data_grad_new":
+        text_error = get_text(user_id, "Error")
+        user_data_grad=message.text.strip()
+        int_data=[user_data_grad]
+        print(int_data)
+        for i in int_data:
+            if (i.isdigit()):
+                grad_int=int(i)
+                print(grad_int)
+                bot.send_message(user_id, f"{true_data_wr},{grad_int}°")
+            elif (i.isdigit()) == False:
+                print(f"not num {i}",end="")
+                bot.send_message(user_id, text_error)
+
+
+
+            #
+            # elif (i.isdigit()) == False:
+            #     text_data_grad = get_text(user_id, "enter_grad")
+            #     text_repeat=get_text(user_id, "repeat")
+            #     print(f"not num {i}",end="")
+            #     bot.send_message(user_id, text_error)
+            #     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            #     butOne = types.KeyboardButton(text_data_grad)
+            #     butTwo = types.KeyboardButton("/close")
+            #     markup.add(butOne, butTwo)
+            #     bot.send_message(message.chat.id, "", reply_markup=markup)
+
+
+
+
+    text_data_grad=get_text(user_id, "enter_grad")
+    text_wind_speed=get_text(user_id, "enter_wind_speed")
+    text_temperature=get_text(user_id, "enter_temperature")
+    text_distance=get_text(user_id, "enter_distance")
+    if message.text == text_data_grad:
+        bot.send_message(user_id, text_data_grad)
+        user_state[user_id] = "text_data_grad_new"
+    elif message.text == text_wind_speed:
+        bot.send_message(user_id, text_wind_speed )
+        user_state[user_id] = "text_data_speed_new"
+    elif message.text == text_temperature:
+        bot.send_message(user_id, text_temperature )
+        user_state[user_id] = "text_data_temperature_new"
+    elif message.text == text_distance:
+        bot.send_message(user_id, text_distance )
+        user_state[user_id] = "text_data_distance_new"
+
+
+
 
 
 def start_calculate(message):
